@@ -1539,7 +1539,7 @@ textarea {
   height: 28px;
   object-fit: contain;
   filter: drop-shadow(0 0 6px rgba(255, 101, 163, 0.6));
-  margin-left: auto; /* Memastikan ikon selalu terdorong ke paling kanan */
+  margin-left: auto; 
 }
 
 /* Styling Warna Harga Rp 2.000 (Gradasi Putih ke Cyan khas Fate) */
