@@ -11,8 +11,8 @@
   --text-soft: #d8c2af;
   --border: rgba(244, 176, 51, 0.35);
   --shadow: rgba(0, 0, 0, 0.42);
-  --font-heading: 'Cinzel', serif;
-  --font-body: 'Plus Jakarta Sans', sans-serif;
+  --font-heading: "Cinzel", serif;
+  --font-body: "Plus Jakarta Sans", sans-serif;
 }
 
 * {
@@ -30,7 +30,7 @@ body {
   font-family: var(--font-body);
   background:
     linear-gradient(90deg, rgba(12, 7, 6, 0.9), rgba(12, 7, 6, 0.75)),
-    url('../images/hero-bg.jpg') center/cover no-repeat fixed;
+    url("../images/hero-bg.jpg") center/cover no-repeat fixed;
   color: var(--text-main);
   min-height: 100vh;
   overflow-x: hidden;
@@ -73,7 +73,10 @@ textarea {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
-  transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s ease;
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease,
+    visibility 0.5s ease;
 }
 
 .app-shell.is-ready {
@@ -103,7 +106,9 @@ textarea {
   display: grid;
   place-items: center;
   background: radial-gradient(circle at top, rgba(255, 197, 80, 0.16), rgba(12, 7, 6, 0.96) 45%);
-  transition: opacity 0.8s ease, visibility 0.8s ease;
+  transition:
+    opacity 0.8s ease,
+    visibility 0.8s ease;
 }
 
 .page-loader.hidden {
@@ -132,6 +137,14 @@ textarea {
   font-size: 2.1rem;
   color: var(--gold-bright);
   animation: pulseGlow 1.4s ease-in-out infinite;
+}
+
+.loader-badge img,
+.brand-mark img {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  object-fit: cover;
 }
 
 .loader-text {
@@ -407,6 +420,91 @@ textarea {
 .section-header h2 {
   font-family: var(--font-heading);
   font-size: clamp(2.1rem, 3vw, 3rem);
+}
+
+.bestseller-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 52px;
+}
+
+.bestseller-card {
+  position: relative;
+  isolation: isolate;
+  width: min(100%, 560px);
+  padding: 34px 28px;
+  overflow: hidden;
+  text-align: center;
+  border-color: rgba(131, 232, 255, 0.82);
+  background: linear-gradient(135deg, rgba(245, 142, 196, 0.2) 0%, transparent 48%, rgba(115, 190, 255, 0.22) 100%), var(--panel);
+  box-shadow:
+    0 18px 42px rgba(0, 0, 0, 0.42),
+    0 0 24px rgba(57, 196, 226, 0.2),
+    0 0 38px rgba(244, 176, 51, 0.08);
+}
+
+.bestseller-icon {
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 18px;
+  border: 1px solid rgba(131, 232, 255, 0.55);
+  border-radius: 18px;
+  color: #b7f2ff;
+  background: rgba(57, 196, 226, 0.12);
+  box-shadow: 0 0 28px rgba(57, 196, 226, 0.14);
+}
+
+.bestseller-icon img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.bestseller-card .section-kicker {
+  color: #83e8ff;
+}
+
+.bestseller-card h2 {
+  margin-bottom: 10px;
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+}
+
+.bestseller-description {
+  max-width: 390px;
+  margin: 0 auto;
+  color: var(--text-soft);
+  line-height: 1.7;
+}
+
+.bestseller-price {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+  margin: 20px 0 18px;
+  color: #b7f2ff;
+}
+
+.bestseller-price strong {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+}
+
+.bestseller-price span {
+  color: var(--text-soft);
+  font-size: 0.9rem;
+}
+
+.bestseller-button {
+  border-color: rgba(131, 232, 255, 0.5);
+  color: #07191e;
+  background: linear-gradient(135deg, #b7f2ff, #54cde6);
+  box-shadow: 0 10px 28px rgba(57, 196, 226, 0.22);
 }
 
 .card-grid {
@@ -919,14 +1017,27 @@ textarea {
 }
 
 @keyframes pulseGlow {
-  0%, 100% { transform: scale(1); box-shadow: 0 0 16px rgba(255, 211, 105, 0.2); }
-  50% { transform: scale(1.08); box-shadow: 0 0 28px rgba(255, 211, 105, 0.5); }
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 16px rgba(255, 211, 105, 0.2);
+  }
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 0 28px rgba(255, 211, 105, 0.5);
+  }
 }
 
 @keyframes loadSlide {
-  0% { transform: translateX(-120%); }
-  50% { transform: translateX(130%); }
-  100% { transform: translateX(-120%); }
+  0% {
+    transform: translateX(-120%);
+  }
+  50% {
+    transform: translateX(130%);
+  }
+  100% {
+    transform: translateX(-120%);
+  }
 }
 
 @media (max-width: 980px) {
@@ -1008,6 +1119,14 @@ textarea {
 
   .hero {
     padding: 52px 0 24px;
+  }
+
+  .bestseller-section {
+    padding-top: 36px;
+  }
+
+  .bestseller-card {
+    padding: 58px 20px 26px;
   }
 
   .hero h1 {
@@ -1159,4 +1278,301 @@ textarea {
     font-size: 0.8rem;
     overflow-wrap: anywhere;
   }
+}
+
+/* Teks Best Seller di atas Card (Dibuat Besar & Menonjol seperti Judul Section) */
+.bestseller-kicker {
+  font-family: var(--font-heading);
+  font-size: clamp(2.1rem, 3vw, 3rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #f8a4d8, #bd8eff, #60cbf8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 20px rgba(189, 142, 255, 0.35);
+}
+
+/* Card Best Seller dengan Gradasi Warna Intertwined Fate */
+.bestseller-card {
+  position: relative;
+  isolation: isolate;
+  width: min(100%, 560px);
+  padding: 34px 28px;
+  overflow: hidden;
+  text-align: center;
+  /* Border disesuaikan dengan warna aksen Intertwined Fate */
+  border: 1.5px solid rgba(189, 142, 255, 0.5);
+  /* Latar belakang menggunakan gradasi Soft Pink -> Purple -> Cyan */
+  background: linear-gradient(135deg, rgba(248, 164, 216, 0.18) 0%, rgba(189, 142, 255, 0.12) 50%, rgba(96, 203, 248, 0.18) 100%), var(--panel);
+  box-shadow:
+    0 18px 42px rgba(0, 0, 0, 0.42),
+    0 0 30px rgba(189, 142, 255, 0.25),
+    0 0 50px rgba(96, 203, 248, 0.15);
+}
+
+/* Frame Icon Intertwined Fate */
+.bestseller-icon {
+  width: 68px;
+  height: 68px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 18px;
+  border: 1px solid rgba(189, 142, 255, 0.6);
+  border-radius: 18px;
+  background: rgba(189, 142, 255, 0.15);
+  box-shadow: 0 0 24px rgba(189, 142, 255, 0.25);
+}
+
+.bestseller-icon img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+}
+
+/* Kicker Kategori di Dalam Card */
+.bestseller-card .section-kicker {
+  color: #60cbf8;
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+}
+
+.bestseller-card h2 {
+  margin-bottom: 10px;
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  color: #ffffff;
+}
+
+.bestseller-description {
+  max-width: 390px;
+  margin: 0 auto;
+  color: var(--text-soft);
+  line-height: 1.7;
+}
+
+/* Harga dengan Gradasi Pink/Cyan khas Fate */
+.bestseller-price {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+  margin: 20px 0 18px;
+  color: #60cbf8;
+}
+
+.bestseller-price strong {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  background: linear-gradient(135deg, #ffffff, #60cbf8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bestseller-price span {
+  color: var(--text-soft);
+  font-size: 0.9rem;
+}
+
+/* Tombol Pesan Sekarang dengan Tema Fate */
+.bestseller-button {
+  border: 1px solid rgba(248, 164, 216, 0.6);
+  color: #0c0714;
+  font-weight: 700;
+  background: linear-gradient(135deg, #f8a4d8, #bd8eff, #60cbf8);
+  box-shadow: 0 10px 28px rgba(189, 142, 255, 0.35);
+  transition: all 0.3s ease;
+}
+
+.bestseller-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px rgba(189, 142, 255, 0.5);
+}
+/* Warna Merah Muda / Pink Khas Intertwined Fate */
+.fate-highlight {
+  color: #ff85c0; /* Merah muda terang */
+  /* Opsional: Efek gradasi pink-magenta lembut jika ingin lebih berkilau */
+  background: linear-gradient(135deg, #ff9ecf 0%, #ff65a3 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* Glow pink halus */
+  text-shadow: 0 0 12px rgba(255, 101, 163, 0.4);
+}
+
+/* Styling Card/Box Khusus Intertwined Fate di Pricelist */
+.price-group.bestseller-price-group {
+  position: relative;
+  padding: 14px 16px;
+  border-radius: 14px;
+  /* Latar belakang & border membedakan card ini dari yang lain */
+  border: 1px solid rgba(255, 126, 185, 0.4);
+  background: linear-gradient(135deg, rgba(255, 101, 163, 0.12) 0%, rgba(189, 142, 255, 0.08) 50%, rgba(56, 217, 255, 0.1) 100%);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.25),
+    0 0 15px rgba(255, 101, 163, 0.15);
+  transition: all 0.3s ease;
+}
+
+.price-group.bestseller-price-group:hover {
+  border-color: rgba(255, 126, 185, 0.65);
+  box-shadow:
+    0 6px 24px rgba(0, 0, 0, 0.35),
+    0 0 20px rgba(255, 101, 163, 0.25);
+}
+
+/* Merapikan Judul Group agar Badge berada Samping Teks */
+.bestseller-price-group .price-group-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Badge "Best Seller" di Samping Teks Intertwined Fate */
+.badge-bestseller {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-radius: 20px;
+  /* Warna teks gradasi terang khas Fate */
+  color: #ffffff;
+  background: linear-gradient(135deg, #ff7eb9 0%, #bd73ff 50%, #38d9ff 100%);
+  box-shadow: 0 0 10px rgba(255, 101, 163, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  line-height: 1;
+}
+
+/* Styling Card Khusus Intertwined Fate */
+/* Card Khusus Intertwined Fate - Kontras Gradasi Pink & Cyan Ditingkatkan */
+.price-group.bestseller-price-group {
+  position: relative;
+  padding: 18px 16px;
+  border-radius: 16px;
+  /* Border dengan warna pink mawar menyala */
+  border: 1.5px solid rgba(255, 101, 163, 0.7);
+  /* Background radial & linear gradient yang lebih tegas dan jelas kontrasnya */
+  background:
+    radial-gradient(circle at 10% 20%, rgba(255, 101, 163, 0.28) 0%, transparent 60%), radial-gradient(circle at 90% 80%, rgba(56, 217, 255, 0.25) 0%, transparent 60%),
+    linear-gradient(135deg, rgba(255, 101, 163, 0.15), rgba(22, 16, 34, 0.9));
+  box-shadow:
+    0 8px 25px rgba(0, 0, 0, 0.45),
+    0 0 20px rgba(255, 101, 163, 0.35),
+    0 0 25px rgba(56, 217, 255, 0.25);
+  transition: all 0.3s ease;
+}
+
+.price-group.bestseller-price-group:hover {
+  border-color: rgba(255, 126, 185, 0.9);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.55),
+    0 0 25px rgba(255, 101, 163, 0.5),
+    0 0 30px rgba(56, 217, 255, 0.35);
+}
+
+.bestseller-price-group .price-group-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Warna Merah Muda (Pink Khas Fate) yang Kontras untuk Kata Fate */
+.fate-pink {
+  color: #ff7eb9;
+  font-weight: 600;
+  background: linear-gradient(135deg, #ff85c0 0%, #ff529a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 8px rgba(255, 101, 163, 0.5));
+}
+
+/* Tulisan BEST SELLER - Gradasi Pink Mawar ke Cyan Terang & Glow Menyala */
+.text-bestseller {
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  /* Gradasi dari Pink cerah, Violet/Ungu, ke Cyan terang (#38d9ff) */
+  background: linear-gradient(90deg, #38d9ff 0%, #38d9ff 45%, #38d9ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* Efek pendaran agar biru dan pink-nya menyala di atas latar belakang gelap */
+  filter: drop-shadow(0 0 10px rgba(255, 101, 163, 0.6)) drop-shadow(0 0 12px rgba(56, 217, 255, 0.5));
+  line-height: 1;
+}
+
+/* Layout Header Card Best Seller */
+/* Header Card Best Seller - Dibuat 100% lebarnya */
+.bestseller-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Mendorong BEST SELLER ke ujung kiri & Gambar IF ke ujung kanan */
+  width: 100%; /* Memastikan header memenuhi seluruh lebar card */
+  margin-bottom: 12px;
+  padding: 0 4px; /* Opsional: memberikan sedikit jarak presisi sejajar dengan garis dalam */
+}
+
+/* Gambar Icon IF */
+.bestseller-icon-sm {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 6px rgba(255, 101, 163, 0.6));
+  margin-left: auto; /* Memastikan ikon selalu terdorong ke paling kanan */
+}
+
+/* Styling Warna Harga Rp 2.000 (Gradasi Putih ke Cyan khas Fate) */
+.bestseller-price-text {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  /* Gradasi dari Putih ke Cyan (#38d9ff) */
+  background: linear-gradient(135deg, #ffffff 30%, #38d9ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* Glow Cyan Halus */
+  filter: drop-shadow(0 0 8px rgba(56, 217, 255, 0.45));
+}
+
+/* Badge NEW di atas judul */
+
+/* Tag NEW menyala di samping judul */
+.text-new-tag {
+  font-size: 0.9rem;
+  font-weight: 800;
+  vertical-align: super;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #ff7eb9 0%, #38d9ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 8px rgba(255, 101, 163, 0.6));
+  border: 1px solid rgba(255, 101, 163, 0.4);
+}
+
+/* Tag NEW Ukuran Kecil Khusus untuk Card Judul (Snezhnaya) */
+.text-new-tag-sm {
+  font-size: 0.6rem; /* Ukuran teks lebih kecil */
+  font-weight: 700;
+  vertical-align: super;
+  padding: 1px 5px; /* Padding lebih ringkas */
+  border-radius: 4px;
+  background: linear-gradient(90deg, #ff7eb9 0%, #38d9ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 4px rgba(255, 101, 163, 0.5));
+  border: 1px solid rgba(255, 101, 163, 0.35);
+  margin-left: 3px;
 }
