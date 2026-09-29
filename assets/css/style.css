@@ -1576,3 +1576,26 @@ textarea {
   border: 1px solid rgba(255, 101, 163, 0.35);
   margin-left: 3px;
 }
+
+/* Aturan dasar untuk tampilan desktop */
+/* Aturan Background untuk Layar Desktop */
+body {
+  background:
+    linear-gradient(90deg, rgba(12, 7, 6, 0.85), rgba(12, 7, 6, 0.65)),
+    url("../images/hero-bg.jpg") no-repeat center right / cover fixed;
+  color: var(--text-main);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Khusus Layar Mobile (Lebar di bawah 768px) */
+@media (max-width: 768px) {
+  body {
+    /* Menggeser posisi background ke kanan (wajah Lumine) di HP */
+    background-position: 78% center;
+    background-attachment: scroll;
+  }
+}
+
+  /* Memberi lapisan kegelapan (overlay) agar teks di atas wajah Lumine tetap terbaca */
+  
