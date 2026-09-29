@@ -622,6 +622,10 @@ textarea {
   margin-bottom: 8px;
 }
 
+.price-box-ascend .list-heading .price-group-title {
+  margin-top: 22.5git px;
+}
+
 .list-count {
   padding: 7px 10px;
   border: 1px solid rgba(244, 176, 51, 0.22);
@@ -1050,7 +1054,8 @@ textarea {
   .three-col {
     grid-template-columns: 1fr;
   }
-  html, body {
+  html,
+  body {
     overflow-x: hidden !important; /* Mencegah halaman bisa di-scroll ke samping */
   }
   body {
@@ -1539,7 +1544,7 @@ textarea {
   height: 28px;
   object-fit: contain;
   filter: drop-shadow(0 0 6px rgba(255, 101, 163, 0.6));
-  margin-left: auto; 
+  margin-left: auto;
 }
 
 /* Styling Warna Harga Rp 2.000 (Gradasi Putih ke Cyan khas Fate) */
@@ -1608,5 +1613,4 @@ body {
   }
 }
 
-  /* Memberi lapisan kegelapan (overlay) agar teks di atas wajah Lumine tetap terbaca */
-  
+/* Memberi lapisan kegelapan (overlay) agar teks di atas wajah Lumine tetap terbaca */
