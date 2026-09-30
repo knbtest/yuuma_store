@@ -1060,10 +1060,26 @@ textarea {
   }
   body {
     /* Mengubah gradasi agar lebih transparan & menggeser fokus background tepat ke wajah Lumine */
+  background: #0a0605 !important;
+    position: relative;
+
+  }
+
+  body::before {
+    content: "";
+    position: fixed; /* Mengunci background agar tidak ikut ter-scroll/bergerak */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh; /* Selalu setinggi layar HP */
+    z-index: -1;   /* Berada tepat di belakang konten */
+    
+    /* Koordinat presisi untuk menampilkan wajah Lumine di HP */
     background:
       linear-gradient(90deg, rgba(12, 7, 6, 0.85), rgba(12, 7, 6, 0.65)),
-      url("../images/hero-bg.jpg") no-repeat 72% center / cover fixed !important;
+      url("../images/hero-bg.jpg") no-repeat 72% center / cover !important;
   }
+
 
   .topbar {
     flex-wrap: wrap;
@@ -1093,8 +1109,8 @@ textarea {
 }
 
 @media (max-width: 640px) {
-  body {
-    background-attachment: scroll;
+ body::before {
+    background-position: 70% center !important;
   }
 
   .container,
