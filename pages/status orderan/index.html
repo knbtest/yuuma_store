@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cek Status Orderan</title>
+    <link rel="icon" type="image/jpeg" href="../../assets/images/lumine.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <link rel="stylesheet" href="../../assets/css/style.css" />
+    
+    <!-- CDN Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  </head>
+  <body>
+    <div id="page-loader" class="page-loader" aria-live="polite">
+      <div class="loader-core">
+        <div class="loader-badge"><img src="../../assets/images/lumine.jpg" alt="Lumine" /></div>
+        <div class="loader-text">Yuuma</div>
+        <div class="loader-bar"><span></span></div>
+      </div>
+    </div>
+
+    <canvas id="particle-canvas"></canvas>
+
+    <div class="app-shell">
+      <header class="topbar glass-card">
+        <a href="../status orderan/index.html" class="brand" aria-label="Yuuma Home">
+          <span class="brand-mark"><img src="../../assets/images/lumine.jpg" alt="Lumine" /></span>
+          <span class="brand-text">Yuuma <small>JOKI</small></span>
+        </a>
+
+        <nav class="main-nav" aria-label="Navigasi utama">
+          <a href="../../index.html">Beranda</a>
+          <a href="../about/index.html">Tentang</a>
+          <a href="../pricelist/index.html">Pricelist</a>
+          <a href="../contact/index.html">Kontak</a>
+          <a href="index.html" class="active">Cek Orderan</a>
+        </nav>
+
+        <a href="https://wa.me/6289674135489" target="_blank" rel="noreferrer" class="btn btn-primary">
+          <i data-lucide="message-square"></i>
+          Chat Admin
+        </a>
+      </header>
+
+      <main class="tracker-page">
+        <div class="glass-card tracker-box">
+          <h2>LIVE ORDER TRACKER</h2>
+          <p style="color: #aaa; font-size: 0.88rem;">Masukkan ID Pesanan yang kamu dapatkan saat order di WA.</p>
+
+          <div class="tracker-input-group">
+            <input type="text" id="trackInput" placeholder="Contoh: YMA-001">
+            <button type="button" onclick="checkOrderStatus()">Cek</button>
+          </div>
+
+          <div id="trackerResult" class="status-result"></div>
+        </div>
+      </main>
+
+      <footer class="site-footer">
+        <p>© 2026 Yuuma Joki. Made with Love for Genshin Impact players.</p>
+      </footer>
+    </div>
+
+    <!-- SCRIPT LOGIKA TRACKER -->
+    <script>
+      // 1. INSIALISASI SUPABASE CLIENT (Menggunakan variabel 'supabaseClient' agar tidak bentrok)
+      const SUPABASE_URL = "https://xmdcyrlyfgukalftiejh.supabase.co";
+      const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhtZGN5cmx5Zmd1a2FsZnRpZWpoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4MTI3MDAsImV4cCI6MjEwNjM4ODcwMH0.yn44MLze47vh636upeVtInalpTjxVfYbA9xR3VEEpD0";
+      
+      const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+      // 2. FUNGSI CEK STATUS ORDER
+      async function checkOrderStatus() {
+        const orderId = document.getElementById('trackInput').value.trim();
+        const resultDiv = document.getElementById('trackerResult');
+
+        if (!orderId) {
+          resultDiv.innerHTML = "<p style='color: #ff4d4d; text-align:center;'>Masukkan ID Pesanan terlebih dahulu!</p>";
+          return;
+        }
+
+        resultDiv.innerHTML = "<p style='text-align:center; color:#aaa;'>Mencari data...</p>";
+
+        try {
+          // Mengambil data dari Supabase
+          const { data, error } = await supabaseClient
+            .from('orders')
+            .select('*')
+            .eq('order_id', orderId)
+            .maybeSingle();
+
+          if (error || !data) {
+            resultDiv.innerHTML = "<p style='color: #ff4d4d; text-align:center;'>ID Pesanan tidak ditemukan atau salah.</p>";
+            return;
+          }
+
+          // Format class status
+          const statusText = data.status || 'Queued';
+          const badgeClass = statusText.toLowerCase().replace(/\s+/g, '-');
+
+          resultDiv.innerHTML = `
+            <div class="status-card" style="margin-top: 20px; padding: 16px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+              <h4 style="margin-top:0; color: #f4b033;">Order ID: ${data.order_id}</h4>
+              <p style="margin: 6px 0;"><strong>Nama:</strong> ${data.customer_name}</p>
+              <p style="margin: 6px 0;"><strong>Layanan:</strong> ${data.service_type}</p>
+              <p style="margin: 6px 0;">
+                <strong>Status:</strong> 
+                <span class="status-badge ${badgeClass}" style="padding: 4px 8px; border-radius: 4px; font-weight: bold;">${statusText}</span>
+              </p>
+            </div>
+          `;
+        } catch (err) {
+          console.error("Error fetching order:", err);
+          resultDiv.innerHTML = "<p style='color: #ff4d4d; text-align:center;'>Terjadi kesalahan koneksi database.</p>";
+        }
+      }
+    </script>
+
+    <script src="../../assets/js/main.js?v=20260915"></script>
+  </body>
+</html>   

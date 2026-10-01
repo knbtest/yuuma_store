@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Yuuma Joki</title>
+  
+  <!-- CSS Utama Kamu -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- CDN Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    body {
+      min-height: 100vh;
+      background: #0a0605;
+      color: #fff;
+      font-family: sans-serif;
+      padding: 20px;
+    }
+
+    .admin-container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 24px;
+      background: rgba(20, 15, 12, 0.85);
+      border: 1px solid rgba(244, 176, 51, 0.3);
+      border-radius: 16px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    input, select, button {
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(244, 176, 51, 0.3);
+      background: #140f0c;
+      color: #fff;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    button {
+      background: #f4b033;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .btn-danger {
+      background: #e74c3c;
+      color: #fff;
+    }
+
+    .btn-danger:hover {
+      background: #c0392b;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    th {
+      color: #f4b033;
+    }
+
+    /* Responsif untuk layar HP */
+    @media (max-width: 600px) {
+      .form-group {
+        flex-direction: column;
+      }
+      input, select, button {
+        width: 100%;
+        box-sizing: border-box;
+      }
+      table {
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="admin-container">
+    
+    <!-- 1. FORM LOGIN ADMIN -->
+    <div id="loginFormSection">
+      <h2>Login Admin Yuuma Joki</h2>
+      <p style="color: #aaa; font-size: 0.85rem;">Masuk menggunakan akun admin Supabase kamu.</p>
+      <div class="form-group" style="flex-direction: column; max-width: 350px;">
+        <input type="email" id="adminEmail" placeholder="Email Admin">
+        <input type="password" id="adminPassword" placeholder="Password Admin">
+        <button type="button" onclick="loginAdmin()">Login</button>
+      </div>
+    </div>
+
+    <!-- 2. DASHBOARD ADMIN (Di-hide sebelum login) -->
+    <div id="adminDashboardSection" style="display: none;">
+      <div class="admin-header">
+        <h3>Panel Kelola Pesanan</h3>
+        <button type="button" onclick="logoutAdmin()" class="btn-danger">Logout</button>
+      </div>
+
+      <!-- Form Tambah Pesanan -->
+      <h4>+ Tambah Pesanan Baru</h4>
+      <div class="form-group">
+        <input type="text" id="newOrderId" placeholder="ID Pesanan (misal: YMA-001)">
+        <input type="text" id="newCustomer" placeholder="Nama Pelanggan">
+        <input type="text" id="newService" placeholder="Layanan (misal: Abyss 36★)">
+        <button type="button" onclick="createOrder()">Tambah</button>
+      </div>
+
+      <hr style="border-color: rgba(255, 255, 255, 0.1); margin: 24px 0;">
+
+      <!-- Tabel Daftar Pesanan -->
+      <h4>Daftar Pesanan Aktif</h4>
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>ID Order</th>
+              <th>Nama</th>
+              <th>Layanan</th>
+              <th>Status</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="ordersTableBody">
+            <!-- Data dari Supabase akan di-render di sini -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SCRIPT LOGIKA ADMIN -->
+  <script>
+    // 1. INSIALISASI SUPABASE CLIENT (Gunakan supabaseClient agar tidak bentrok dengan library global)
+    const SUPABASE_URL = "https://xmdcyrlyfgukalftiejh.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhtZGN5cmx5Zmd1a2FsZnRpZWpoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4MTI3MDAsImV4cCI6MjEwNjM4ODcwMH0.yn44MLze47vh636upeVtInalpTjxVfYbA9xR3VEEpD0";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // 2. FUNGSI LOGIN ADMIN
+    async function loginAdmin() {
+      const emailInput = document.getElementById('adminEmail');
+      const passwordInput = document.getElementById('adminPassword');
+
+      if (!emailInput || !passwordInput) {
+        alert("Elemen input adminEmail atau adminPassword tidak ditemukan di HTML!");
+        return;
+      }
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+
+      if (!email || !password) {
+        alert("Email dan password wajib diisi!");
+        return;
+      }
+
+      try {
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
+          email: email,
+          password: password
+        });
+
+        if (error) {
+          alert("Login Gagal: " + error.message);
+        } else {
+          alert("Login Berhasil!");
+          showDashboard();
+        }
+      } catch (err) {
+        console.error("Error saat login:", err);
+        alert("Terjadi kesalahan sistem, cek console browser.");
+      }
+    }
+
+    // 3. FUNGSI LOGOUT ADMIN
+    async function logoutAdmin() {
+      await supabaseClient.auth.signOut();
+      location.reload();
+    }
+
+    // 4. TAMPILKAN DASHBOARD
+    function showDashboard() {
+      const loginSection = document.getElementById('loginFormSection');
+      const dashboardSection = document.getElementById('adminDashboardSection');
+      
+      if (loginSection) loginSection.style.display = 'none';
+      if (dashboardSection) dashboardSection.style.display = 'block';
+      
+      loadOrders();
+    }
+
+    // 5. READ ORDERS (Ambil Data)
+    async function loadOrders() {
+      const { data, error } = await supabaseClient
+        .from('orders')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      const tbody = document.getElementById('ordersTableBody');
+      tbody.innerHTML = '';
+
+      if (error) {
+        tbody.innerHTML = `<tr><td colspan="5" style="color:red;">Gagal memuat data: ${error.message}</td></tr>`;
+        return;
+      }
+
+      if (data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#888;">Belum ada pesanan aktif.</td></tr>`;
+        return;
+      }
+
+      data.forEach(order => {
+        tbody.innerHTML += `
+          <tr>
+            <td><strong>${order.order_id}</strong></td>
+            <td>${order.customer_name}</td>
+            <td>${order.service_type}</td>
+            <td>
+              <select onchange="updateStatus(${order.id}, this.value)">
+                <option value="Queued" ${order.status === 'Queued' ? 'selected' : ''}>Queued</option>
+                <option value="In Progress" ${order.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+                <option value="Completed" ${order.status === 'Completed' ? 'selected' : ''}>Completed</option>
+              </select>
+            </td>
+            <td>
+              <button type="button" onclick="deleteOrder(${order.id})" class="btn-danger" style="padding: 6px 10px; font-size: 0.8rem;">Hapus</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    // 6. CREATE ORDER (Tambah Data)
+    async function createOrder() {
+      const order_id = document.getElementById('newOrderId').value.trim();
+      const customer_name = document.getElementById('newCustomer').value.trim();
+      const service_type = document.getElementById('newService').value.trim();
+
+      if (!order_id || !customer_name || !service_type) {
+        alert("Semua field tambah pesanan wajib diisi!");
+        return;
+      }
+
+      const { error } = await supabaseClient
+        .from('orders')
+        .insert([{ order_id, customer_name, service_type, status: 'Queued' }]);
+
+      if (error) {
+        alert("Gagal Menambah Pesanan: " + error.message);
+      } else {
+        document.getElementById('newOrderId').value = '';
+        document.getElementById('newCustomer').value = '';
+        document.getElementById('newService').value = '';
+        alert("Pesanan Berhasil Ditambahkan!");
+        loadOrders();
+      }
+    }
+
+    // 7. UPDATE STATUS (Ubah Status Pesanan)
+    async function updateStatus(id, newStatus) {
+      const { error } = await supabaseClient
+        .from('orders')
+        .update({ status: newStatus, updated_at: new Date() })
+        .eq('id', id);
+
+      if (error) {
+        alert("Gagal Mengubah Status: " + error.message);
+      } else {
+        loadOrders();
+      }
+    }
+
+    // 8. DELETE ORDER (Hapus Manual)
+    async function deleteOrder(id) {
+      if (confirm("Yakin ingin menghapus pesanan ini secara manual?")) {
+        const { error } = await supabaseClient.from('orders').delete().eq('id', id);
+        if (error) {
+          alert("Gagal Menghapus: " + error.message);
+        } else {
+          loadOrders();
+        }
+      }
+    }
+
+    // 9. CEK SESI LOGIN SAAT HALAMAN DIBUKA
+    window.addEventListener('DOMContentLoaded', async () => {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (session) {
+        showDashboard();
+      }
+    });
+  </script>
+</body>
+</html>
